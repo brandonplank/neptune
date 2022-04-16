@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Neptune</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/Footer-Dark.css">
+    <link rel="stylesheet" href="assets/css/Navigation-Clean.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/notifications.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="assets/js/global.js"></script>
+    <script src="assets/js/notifications.js"></script>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><img style="width: 31px;height: 40px;" src="{{.logo}}">&nbsp; &nbsp;Neptune</a></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/v1/classroom.csv">Download CSV</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="logout()">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div style="margin-top: 50px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="qr-reader" style="width:560px"></div>
+            </div>
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div></div>
+<div>
+    <footer class="footer-dark" style="height: 110.5px;">
+        <div class="container">
+            <p class="copyright" style="padding-top: 0px;"><strong>Brandon Plank © {{.year}}</strong></p>
+        </div>
+    </footer>
+</div>
+<script type="text/javascript" src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/js/classroom.js"></script>
+</body>
+</html>
