@@ -36,7 +36,7 @@ func setupRoutes(app *fiber.App) {
 		},
 	)
 
-	app.Static("/", "./Public")
+	app.Static("/", "./public")
 
 	app.Get("/", routes.Home)
 
