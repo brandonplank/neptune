@@ -5,6 +5,7 @@ go 1.17
 require (
 	brandonplank.org/neptune/database v0.0.0
 	brandonplank.org/neptune/routes v0.0.0
+	github.com/aldy505/sentry-fiber v0.0.1
 	github.com/gofiber/fiber/v2 v2.31.0
 	github.com/gofiber/template v1.6.26
 )
@@ -21,6 +22,7 @@ require (
 	brandonplank.org/neptune/global v0.0.0 // indirect
 	brandonplank.org/neptune/models v0.0.0 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
+	github.com/getsentry/sentry-go v0.11.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gocarina/gocsv v0.0.0-20220310154401-d4df709ca055 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
