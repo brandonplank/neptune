@@ -14,6 +14,7 @@ import (
 	"log"
 	"strconv"
 	"time"
+	_ "time/tzdata"
 )
 
 func setupRoutes(app *fiber.App) {
@@ -74,11 +75,17 @@ func init() {
 
 // main SignX program entry point
 func main() {
+	loc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		log.Println("Could not set time to New York")
+	}
+	time.Local = loc
+
 	log.Println("Starting Neptune")
 
 	// Sentry
 
-	err := sentry.Init(sentry.ClientOptions{
+	err = sentry.Init(sentry.ClientOptions{
 		Dsn:   "https://0b16d080fb454e9ca20243f008b061c1@o956450.ingest.sentry.io/6340501",
 		Debug: false,
 	})
