@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/template/html"
+	"github.com/mileusna/crontab"
 	"log"
 	"strconv"
 	"time"
@@ -97,6 +98,18 @@ func main() {
 	router := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 		Views:                 engine,
+	})
+
+	// Cronjobs
+
+	ctab := crontab.New()
+
+	ctab.MustAddJob("5 15 * * 1-5", func() { // 03:05 PM every weekday
+
+	})
+
+	ctab.MustAddJob("0 0 * * 1-5", func() { // 12:00 AM every weekday
+		global.CleanStudents()
 	})
 
 	// Setup all the server routes

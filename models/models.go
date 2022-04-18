@@ -21,11 +21,18 @@ type Students []Student
 type PublicStudents []PublicStudent
 
 type Student struct {
-	TeacherId guuid.UUID `json:"id"`
+	Id        guuid.UUID `gorm:"primary_key" json:"id"`
+	TeacherId guuid.UUID `json:"TeacherId"`
 	Name      string     `csv:"Name" json:"name" bson:"name"`
 	SignOut   string     `csv:"Signed Out" json:"signedOut" bson:"signedOut"`
 	SignIn    string     `csv:"Signed In" json:"signedIn" bson:"signedIn"`
 	Date      string     `csv:"Date" json:"date" bson:"date"`
+}
+
+func (base *Student) BeforeCreate(tx *gorm.DB) (err error) {
+	uuid := guuid.New()
+	base.Id = uuid
+	return
 }
 
 func (p Students) Len() int {
