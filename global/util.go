@@ -90,7 +90,7 @@ func GetStudentsFromUserID(id string) models.Students {
 
 func GetSchoolFromUser(id string) models.School {
 	var school models.School
-	database.DB.Where("school_id = ?", id).First(&school)
+	database.DB.Where("id = ?", id).First(&school)
 	return school
 }
 
@@ -108,7 +108,7 @@ func GetAdmins() []models.User {
 
 func DoesUserHaveStudents(id string) bool {
 	students := GetStudentsFromUserID(id)
-	if len(students) < 1 {
+	if len(students) > 0 {
 		return true
 	}
 	return false
@@ -126,7 +126,7 @@ func GetSchoolSignoutsFromSchoolID(id string) models.Students {
 
 func DoesSchoolHaveSignouts(id string) bool {
 	students := GetSchoolSignoutsFromSchoolID(id)
-	if len(students) < 1 {
+	if len(students) > 0 {
 		return true
 	}
 	return false
@@ -157,8 +157,9 @@ func EmailUsers() {
 		}
 	}
 
-	for _, user := range GetAdmins() {
+	for _, user := range GetNormalUsers() {
 		if !DoesUserHaveStudents(user.Id.String()) {
+			log.Println(fmt.Sprintf("%s has no students, not sending email", user.Name))
 			continue
 		}
 		students := GetStudentsFromUserID(user.Id.String())
@@ -167,7 +168,7 @@ func EmailUsers() {
 		if err != nil {
 			log.Println(err)
 		}
-		if len(csvClass) < 5 {
+		if len(csvClass) < 1 {
 			continue
 		}
 		csvReader := bytes.NewReader(csvClass)

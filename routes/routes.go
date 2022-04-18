@@ -426,6 +426,22 @@ func AdminSearchStudent(ctx *fiber.Ctx) error {
 	return ctx.Send(content)
 }
 
+func Admin(ctx *fiber.Ctx) error {
+	user, err := global.GetUserFromToken(ctx)
+	if err != nil {
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
+	}
+
+	if user.PermissionLevel < 1 {
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, "you lack admin level 1 or above")
+	}
+
+	return ctx.Render("main", fiber.Map{
+		"year": time.Now().Format("2006"),
+		"logo": "assets/img/viking_logo.png",
+	})
+}
+
 func Home(ctx *fiber.Ctx) error {
 	logoURL := "assets/img/viking_logo.png"
 

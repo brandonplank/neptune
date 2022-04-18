@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/template/html"
+	"github.com/joho/godotenv"
 	"github.com/mileusna/crontab"
 	"log"
 	"os"
@@ -84,6 +85,14 @@ func main() {
 	}
 	time.Local = loc
 
+	// Load .env if we are running local
+	if !global.IsRailway() {
+		err = godotenv.Load()
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
+	}
+
 	global.EmailPassword, _ = os.LookupEnv("EMAIL_PASSWORD")
 	log.Println("Starting Neptune")
 
@@ -104,6 +113,8 @@ func main() {
 
 	// MySQL
 	database.Connect()
+
+	// global.CleanStudents()
 
 	engine := html.New("./resources/views", ".html")
 	router := fiber.New(fiber.Config{

@@ -21,8 +21,8 @@ type Students []Student
 type PublicStudents []PublicStudent
 
 type Student struct {
-	Id        guuid.UUID `gorm:"primary_key" json:"id"`
-	TeacherId guuid.UUID `json:"TeacherId"`
+	Id        guuid.UUID `csv:"-" gorm:"primary_key" json:"id"`
+	TeacherId guuid.UUID `csv:"-" json:"TeacherId"`
 	Name      string     `csv:"Name" json:"name" bson:"name"`
 	SignOut   string     `csv:"Signed Out" json:"signedOut" bson:"signedOut"`
 	SignIn    string     `csv:"Signed In" json:"signedIn" bson:"signedIn"`
