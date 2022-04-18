@@ -5,5 +5,6 @@ const (
 )
 
 var (
-	Port = 8080
+	Port          = 8080
+	EmailPassword string
 )

@@ -5,8 +5,10 @@ go 1.17
 require (
 	brandonplank.org/neptune/database v0.0.0-00010101000000-000000000000
 	brandonplank.org/neptune/models v0.0.0
+	github.com/gocarina/gocsv v0.0.0-20220310154401-d4df709ca055
 	github.com/gofiber/fiber/v2 v2.31.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 )
 
 require (

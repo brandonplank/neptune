@@ -12,6 +12,7 @@ import (
 	"github.com/gofiber/template/html"
 	"github.com/mileusna/crontab"
 	"log"
+	"os"
 	"strconv"
 	"time"
 	_ "time/tzdata"
@@ -75,12 +76,14 @@ func init() {
 
 // main SignX program entry point
 func main() {
+	// Pre Start
 	loc, err := time.LoadLocation("America/New_York")
 	if err != nil {
 		log.Println("Could not set time to New York")
 	}
 	time.Local = loc
 
+	global.EmailPassword, _ = os.LookupEnv("EMAIL_PASSWORD")
 	log.Println("Starting Neptune")
 
 	// Sentry
@@ -112,7 +115,7 @@ func main() {
 	ctab := crontab.New()
 
 	ctab.MustAddJob("5 15 * * 1-5", func() { // 03:05 PM every weekday
-
+		global.EmailUsers()
 	})
 
 	ctab.MustAddJob("0 0 * * 1-5", func() { // 12:00 AM every weekday

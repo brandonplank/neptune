@@ -3,12 +3,19 @@ package global
 import (
 	"brandonplank.org/neptune/database"
 	"brandonplank.org/neptune/models"
+	"bytes"
 	"errors"
+	"fmt"
+	csv "github.com/gocarina/gocsv"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
+	emailClient "github.com/jordan-wright/email"
+	"log"
 	"net/http"
+	"net/smtp"
 	"os"
 	"reflect"
+	"sort"
 )
 
 func GetUserFromToken(ctx *fiber.Ctx) (*models.User, error) {
@@ -72,7 +79,109 @@ func CraftReturnStatus(ctx *fiber.Ctx, status int, message string) error {
 
 func CleanStudents() {
 	var students models.Students
-	database.DB.Delete(&students)
+	database.DB.Find(&students).Delete(&students)
+}
+
+func GetStudentsFromUserID(id string) models.Students {
+	var students models.Students
+	database.DB.Where("teacher_id = ?", id).Find(&students)
+	return students
+}
+
+func GetSchoolFromUser(id string) models.School {
+	var school models.School
+	database.DB.Where("school_id = ?", id).First(&school)
+	return school
+}
+
+func GetNormalUsers() []models.User {
+	var users []models.User
+	database.DB.Where("permission_level < ?", 2).Find(&users)
+	return users
+}
+
+func GetAdmins() []models.User {
+	var admins []models.User
+	database.DB.Where("permission_level > ? AND permission_level <= ?", 1, 5).Find(&admins)
+	return admins
+}
+
+func DoesUserHaveStudents(id string) bool {
+	students := GetStudentsFromUserID(id)
+	if len(students) < 1 {
+		return true
+	}
+	return false
+}
+
+func GetSchoolSignoutsFromSchoolID(id string) models.Students {
+	var students models.Students
+	var teachers []models.User
+	database.DB.Where("school_id = ?", id).Find(&teachers)
+	for _, teacher := range teachers {
+		students = append(students, GetStudentsFromUserID(teacher.Id.String())...)
+	}
+	return students
+}
+
+func DoesSchoolHaveSignouts(id string) bool {
+	students := GetSchoolSignoutsFromSchoolID(id)
+	if len(students) < 1 {
+		return true
+	}
+	return false
+}
+
+func EmailUsers() {
+	for _, admin := range GetAdmins() {
+		if !DoesSchoolHaveSignouts(admin.SchoolId.String()) {
+			continue
+		}
+		allStudents := GetSchoolSignoutsFromSchoolID(admin.SchoolId.String())
+		sort.Sort(allStudents)
+		ReverseSlice(allStudents)
+		content, _ := csv.MarshalBytes(allStudents)
+		csvReader := bytes.NewReader(content)
+
+		school := GetSchoolFromUser(admin.Id.String())
+
+		schoolEmail := emailClient.NewEmail()
+		schoolEmail.From = "Neptune <planksprojects@gmail.com>"
+		schoolEmail.Subject = "Neptune Sign-Outs"
+		schoolEmail.To = []string{admin.Email}
+		schoolEmail.Text = []byte("This is an automated email to " + school.Name)
+		schoolEmail.Attach(csvReader, fmt.Sprintf("%s.csv", school.Name), "text/csv")
+		err := schoolEmail.Send("smtp.gmail.com:587", smtp.PlainAuth("", "planksprojects@gmail.com", EmailPassword, "smtp.gmail.com"))
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	for _, user := range GetAdmins() {
+		if !DoesUserHaveStudents(user.Id.String()) {
+			continue
+		}
+		students := GetStudentsFromUserID(user.Id.String())
+
+		csvClass, err := csv.MarshalBytes(students)
+		if err != nil {
+			log.Println(err)
+		}
+		if len(csvClass) < 5 {
+			continue
+		}
+		csvReader := bytes.NewReader(csvClass)
+		classroomEmail := emailClient.NewEmail()
+		classroomEmail.From = "Neptune <planksprojects@gmail.com>"
+		classroomEmail.Subject = "Neptune Sign-Outs"
+		classroomEmail.To = []string{user.Email}
+		classroomEmail.Text = []byte("This is an automated email to " + user.Name)
+		classroomEmail.Attach(csvReader, fmt.Sprintf("%s.csv", user.Name), "text/csv")
+		err = classroomEmail.Send("smtp.gmail.com:587", smtp.PlainAuth("", "planksprojects@gmail.com", EmailPassword, "smtp.gmail.com"))
+		if err != nil {
+			log.Println(err)
+		}
+	}
 }
 
 func IsRailway() bool {
