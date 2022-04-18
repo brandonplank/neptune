@@ -1,3 +1,8 @@
+const successNotification = window.createNotification({})
+const errorNotification = window.createNotification({
+    theme: 'error'
+})
+
 // Scheduler
 function runAtTime(method, hour, minute, second) {
     (function loop() {
@@ -135,4 +140,96 @@ try {
         }
     })
 } catch (e) {
+}
+
+$("#addUser").submit(function(e) {
+    e.preventDefault();
+});
+
+function createUser() {
+    var email = document.getElementById('addUser').elements['Email'].value;
+    var name = document.getElementById("addUser").elements["Name"].value;
+    var password = document.getElementById("addUser").elements["Password"].value;
+    var level = document.getElementById('addUser').elements['Level'].value;
+    var school = document.getElementById('addUser').elements['School'].value;
+    console.log(`Creating ${name}:${email} perm:${level} school:${school}`)
+    $.ajax({
+        type: "POST",
+        url: "/v1/adminRegister",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            "email": email,
+            "name": name,
+            "schoolID": school,
+            "permissionLevel": parseInt(level),
+            "password": password
+        }),
+        success: function (data) {
+            successNotification({
+                title: 'Success',
+                message: data.message
+            })
+            setTimeout(function () {
+                window.location.reload(true)
+            }, 2*1000)
+        },
+        error: function (error) {
+            try {
+                errorNotification({
+                    title: 'Error',
+                    message: error.message
+                })
+            } catch (error) {
+                console.error(error)
+                errorNotification({
+                    title: 'Error',
+                    message: "An unknown error occurred"
+                })
+            }
+        }
+    })
+}
+
+$("#addSchool").submit(function(e) {
+    e.preventDefault();
+});
+
+function createSchool() {
+    var name = document.getElementById("addSchool").elements["SchoolName"].value;
+    console.log(`Creating ${name}`)
+    $.ajax({
+        type: "POST",
+        url: "/v1/addSchool",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            "name": name,
+        }),
+        success: function (data) {
+            successNotification({
+                title: 'Success',
+                message: data.message
+            })
+            setTimeout(function () {
+                window.location.reload(true)
+            }, 2*1000)
+        },
+        error: function (error) {
+            try {
+                errorNotification({
+                    title: 'Error',
+                    message: error.message
+                })
+            } catch (error) {
+                console.error(error)
+                errorNotification({
+                    title: 'Error',
+                    message: "An unknown error occurred"
+                })
+            }
+        }
+    })
 }

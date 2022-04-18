@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="assets/css/Footer-Dark.css">
     <link rel="stylesheet" href="assets/css/Navigation-Clean.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="assets/js/notifications.js"></script>
+    <link rel="stylesheet" href="assets/css/notifications.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -33,23 +35,38 @@
     </div>
 </nav>
 <div style="margin-top: 50px; text-align: center">
-    <label style="color: white" for="Email">Email address</label>
-    <input type="email" id="Email" placeholder="name@example.com">
-    <br>
+    <form id="addUser">
+        <label style="color: white" for="Email">Email address</label>
+        <input type="email" id="Email" placeholder="name@example.com">
+        <br>
 
-    <label style="color: white" for="Name">Name</label>
-    <input type="name" id="Name" placeholder="John Doe">
-    <br>
+        <label style="color: white" for="Name">Name</label>
+        <input type="name" id="Name" placeholder="John Doe">
+        <br>
 
-    <label style="color: white" for="Name">Permission Level</label>
-    <select id="Level" name="Level"></select>
-    <br>
+        <label style="color: white" for="Password">Password</label>
+        <input type="password" id="Password" placeholder="Password">
+        <br>
 
-    <label style="color: white">School</label>
-    <select id="School" name="Select School">
-        <option value="">No School</option>
-    </select>
+        <label style="color: white" for="Name">Permission Level</label>
+        <select id="Level" name="Level"></select>
+        <br>
+
+        <label style="color: white">School</label>
+        <select id="School" name="Select School">
+            <option value="">No School</option>
+        </select>
+        <br>
+        <button class="" onclick="createUser()">Create User</button>
+    </form>
     <br>
+    <form id="addSchool">
+        <label style="color: white" for="SchoolName">School Name</label>
+        <input type="name" id="SchoolName" placeholder="School Name">
+        <br>
+
+        <button class="" onclick="createSchool()">Create School</button>
+    </form>
 </div>
 <div></div>
 <div>
