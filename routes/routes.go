@@ -200,7 +200,7 @@ func Logout(ctx *fiber.Ctx) error {
 func User(ctx *fiber.Ctx) error {
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
-		return err
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 	return ctx.JSON(user)
 }
@@ -208,7 +208,7 @@ func User(ctx *fiber.Ctx) error {
 func AddSchool(ctx *fiber.Ctx) error {
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
-		return err
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
 	if user.PermissionLevel < 10 {
@@ -236,7 +236,7 @@ func AddSchool(ctx *fiber.Ctx) error {
 func GetSchool(ctx *fiber.Ctx) error {
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
-		return err
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 	var school models.School
 	database.DB.Where("id = ?", user.SchoolId).First(&school)
@@ -263,7 +263,7 @@ func IsOut(ctx *fiber.Ctx) error {
 	// Get the teacher
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
-		return err
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
 	var students models.Students
@@ -288,7 +288,7 @@ func Id(ctx *fiber.Ctx) error {
 	// Get the teacher
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
-		return err
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
 	var students models.Students
@@ -317,7 +317,7 @@ func Id(ctx *fiber.Ctx) error {
 func GetCSV(ctx *fiber.Ctx) error {
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
-		return err
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
 	var students models.Students
@@ -338,7 +338,7 @@ func GetCSV(ctx *fiber.Ctx) error {
 func CSVFile(ctx *fiber.Ctx) error {
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
-		return err
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
 	var students models.Students
@@ -360,7 +360,7 @@ func CSVFile(ctx *fiber.Ctx) error {
 func GetAdminCSV(ctx *fiber.Ctx) error {
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
-		return err
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
 	var allStudents models.Students
@@ -388,6 +388,18 @@ func GetAdminCSV(ctx *fiber.Ctx) error {
 	return ctx.Send(studentsBytes)
 }
 
+func GetUserPermissionLevel(ctx *fiber.Ctx) error {
+	user, err := global.GetUserFromToken(ctx)
+	if err != nil {
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
+	}
+
+	type Level struct {
+		Level uint `json:"level"`
+	}
+	return ctx.JSON(Level{Level: user.PermissionLevel})
+}
+
 func AdminSearchStudent(ctx *fiber.Ctx) error {
 	nameBase64 := ctx.Params("name")
 	nameData, err := base64.URLEncoding.DecodeString(nameBase64)
@@ -398,7 +410,7 @@ func AdminSearchStudent(ctx *fiber.Ctx) error {
 
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
-		return err
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
 	var allStudents models.Students
@@ -446,7 +458,14 @@ func Home(ctx *fiber.Ctx) error {
 
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
-		return global.CraftReturnStatus(ctx, fiber.StatusInternalServerError, "Could not get the user")
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
+	}
+
+	if user.PermissionLevel >= 10 {
+		return ctx.Render("superadmin", fiber.Map{
+			"year": time.Now().Format("2006"),
+			"logo": logoURL,
+		})
 	}
 
 	if user.PermissionLevel > 1 {

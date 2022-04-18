@@ -13,11 +13,15 @@ import (
 
 func GetUserFromToken(ctx *fiber.Ctx) (*models.User, error) {
 	cookie := ctx.Cookies("token")
+	if len(cookie) < 5 {
+		return nil, errors.New("please set jwt token")
+	}
 	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(SignedJWTKey), nil
 	})
+
 	if err != nil || !token.Valid {
-		return nil, CraftReturnStatus(ctx, fiber.StatusUnauthorized, "Invalid JWT token")
+		return nil, errors.New("invalid jwt token")
 	}
 
 	claims := token.Claims.(*jwt.StandardClaims)

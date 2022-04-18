@@ -61,6 +61,7 @@ func setupRoutes(app *fiber.App) {
 	v1.Post("/search/:name", routes.AdminSearchStudent)
 	v1.Get("/getSchool", routes.GetSchool)
 	v1.Get("/getSchools", routes.GetSchools)
+	v1.Get("/getUserPermissionLevel", routes.GetUserPermissionLevel)
 }
 
 func init() {

@@ -93,3 +93,46 @@ function arrayToTable(tableData) {
     })
     return table
 }
+
+try {
+    var schoolSelect = document.getElementById("School");
+    if(schoolSelect == null) {
+        throw ""
+    }
+    $.ajax({
+        type: "GET",
+        url: "/v1/getSchools/",
+        success: function (data) {
+            console.log(data)
+            for (var school of data) {
+                var option = document.createElement("option");
+                option.text = school.name;
+                option.value = school.id;
+                schoolSelect.add(option);
+            }
+        }
+    })
+} catch (e) {
+    console.log("did not find school selection, not on page.")
+}
+
+try {
+    var levelSelect = document.getElementById("Level");
+    if(levelSelect == null) {
+        throw ""
+    }
+    $.ajax({
+        type: "GET",
+        url: "/v1/getUserPermissionLevel/",
+        success: function (data) {
+            console.log(data.level)
+            for (var i = 0; i < data.level; i++) {
+                var option = document.createElement("option");
+                option.text = i;
+                option.value = i;
+                levelSelect.add(option);
+            }
+        }
+    })
+} catch (e) {
+}
