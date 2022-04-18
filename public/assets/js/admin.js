@@ -40,39 +40,6 @@ function SearchStudent() {
     })
 }
 
-function addTeacher(name, email) {
-    console.log("Adding", name)
-    $.ajax({
-        type: "POST",
-        url: "/addTeacher",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data: JSON.stringify({
-            "name": name,
-            "email": email
-        }),
-        success: function (data) {
-        }
-    })
-}
-
-function removeTeacher(email) {
-    console.log("Removing", email)
-    $.ajax({
-        type: "POST",
-        url: "/removeTeacher",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data: JSON.stringify({
-            "email": email,
-        }),
-        success: function (data) {
-        }
-    })
-}
-
 $('#name').keypress(function(e){
     if (e.which === 13) {
         SearchStudent()
@@ -80,10 +47,10 @@ $('#name').keypress(function(e){
 });
 
 // Run this automatically on page load
-getTable()
+SearchStudent()
 
 // Run every 10 seconds
-setInterval(getTable, 1000 * 30);
+setInterval(SearchStudent, 1000 * 30);
 
 function arrayToTable(tableData) {
     var table = $('<table class="table"></table>');
