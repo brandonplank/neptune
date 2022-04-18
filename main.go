@@ -57,7 +57,7 @@ func setupRoutes(app *fiber.App) {
 	v1.Post("/addSchool", routes.AddSchool)
 
 	v1.Get("/GetCSV", routes.GetCSV)
-	v1.Get("/GetAdminCSV", routes.GetAdminCSV)
+	v1.Get("/admin.csv", routes.GetAdminCSVFile)
 	v1.Get("/classroom.csv", routes.CSVFile)
 	v1.Get("/user", routes.User)
 	v1.Post("/search", routes.AdminSearchStudent)
