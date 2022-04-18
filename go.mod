@@ -8,7 +8,7 @@ require (
 	brandonplank.org/neptune/routes v0.0.0
 	github.com/getsentry/sentry-go v0.13.0
 	github.com/gofiber/fiber/v2 v2.32.0
-	github.com/gofiber/template v1.6.26
+	github.com/gofiber/template v1.6.27
 	github.com/mileusna/crontab v1.2.0
 )
 

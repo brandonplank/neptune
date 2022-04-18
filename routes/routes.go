@@ -266,10 +266,8 @@ func IsOut(ctx *fiber.Ctx) error {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
-	var students models.Students
+	students := global.GetStudentsFromUserID(user.Id.String())
 
-	//Query students with the teachers ID
-	database.DB.Where("teacher_id = ?", user.Id).Find(&students)
 	type out struct {
 		IsOut bool   `json:"isOut"`
 		Name  string `json:"name"`
@@ -291,10 +289,7 @@ func Id(ctx *fiber.Ctx) error {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
-	var students models.Students
-
-	//Query students with the teachers ID
-	database.DB.Where("teacher_id = ?", user.Id).Find(&students)
+	students := global.GetStudentsFromUserID(user.Id.String())
 
 	if global.IsStudentOut(studentName, students) {
 		log.Println(fmt.Sprintf("%s has retured to %s's classroom", studentName, user.Name))
@@ -320,10 +315,25 @@ func GetCSV(ctx *fiber.Ctx) error {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
-	var students models.Students
+	students := global.GetStudentsFromUserID(user.Id.String())
 
-	//Query students with the teachers ID
-	database.DB.Where("teacher_id = ?", user.Id).Find(&students)
+	publicStudents := models.StudentsToPublicStudents(students)
+	sort.Sort(publicStudents)
+	global.ReverseSlice(publicStudents)
+	studentsBytes, err := csv.MarshalBytes(publicStudents)
+	if err != nil {
+		return global.CraftReturnStatus(ctx, fiber.StatusInternalServerError, "Could not marshal student list")
+	}
+	return ctx.Send(studentsBytes)
+}
+
+func GetAdminCSV(ctx *fiber.Ctx) error {
+	user, err := global.GetUserFromToken(ctx)
+	if err != nil {
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
+	}
+
+	students := global.GetSchoolSignoutsFromSchoolID(user.SchoolId.String())
 
 	publicStudents := models.StudentsToPublicStudents(students)
 	sort.Sort(publicStudents)
@@ -341,10 +351,7 @@ func CSVFile(ctx *fiber.Ctx) error {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
-	var students models.Students
-
-	//Query students with the teachers ID
-	database.DB.Where("teacher_id = ?", user.Id).Find(&students)
+	students := global.GetStudentsFromUserID(user.Id.String())
 
 	publicStudents := models.StudentsToPublicStudents(students)
 	sort.Sort(publicStudents)
@@ -363,19 +370,7 @@ func GetAdminCSVFile(ctx *fiber.Ctx) error {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
-	var allStudents models.Students
-	var teachers []models.User
-
-	//Query teachers
-	database.DB.Where("school_id = ?", user.SchoolId).Find(&teachers)
-
-	for _, teacher := range teachers {
-		var students models.Students
-		database.DB.Where("teacher_id = ?", teacher.Id).Find(&students)
-		for _, student := range students {
-			allStudents = append(allStudents, student)
-		}
-	}
+	allStudents := global.GetSchoolSignoutsFromSchoolID(user.SchoolId.String())
 
 	publicStudents := models.StudentsToPublicStudents(allStudents)
 	sort.Sort(publicStudents)
@@ -413,18 +408,7 @@ func AdminSearchStudent(ctx *fiber.Ctx) error {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
-	var allStudents models.Students
-	var teachers []models.User
-
-	//Query teachers
-	database.DB.Where("school_id = ?", user.SchoolId).Find(&teachers)
-	for _, teacher := range teachers {
-		var students models.Students
-		database.DB.Where("teacher_id = ?", teacher.Id).Find(&students)
-		for _, student := range students {
-			allStudents = append(allStudents, student)
-		}
-	}
+	allStudents := global.GetSchoolSignoutsFromSchoolID(user.SchoolId.String())
 
 	var retStudents models.Students
 

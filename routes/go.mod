@@ -1,6 +1,6 @@
 module brandonplank.org/signx/routes
 
-go 1.18
+go 1.17
 
 require (
 	brandonplank.org/neptune/database v0.0.0
@@ -16,6 +16,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
+	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible // indirect
 	gorm.io/driver/mysql v1.3.3 // indirect
 	gorm.io/gorm v1.23.4 // indirect
 )

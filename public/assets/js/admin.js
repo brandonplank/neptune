@@ -47,10 +47,10 @@ $('#name').keypress(function(e){
 });
 
 // Run this automatically on page load
-SearchStudent()
+getTable()
 
 // Run every 10 seconds
-setInterval(SearchStudent, 1000 * 30);
+setInterval(getTable, 1000 * 30);
 
 function arrayToTable(tableData) {
     var table = $('<table class="table"></table>');
