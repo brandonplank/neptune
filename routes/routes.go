@@ -357,7 +357,7 @@ func CSVFile(ctx *fiber.Ctx) error {
 	return ctx.Send(studentsBytes)
 }
 
-func GetAdminCSV(ctx *fiber.Ctx) error {
+func GetAdminCSVFile(ctx *fiber.Ctx) error {
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
