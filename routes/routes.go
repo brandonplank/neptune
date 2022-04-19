@@ -461,10 +461,12 @@ func Home(ctx *fiber.Ctx) error {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
-	if user.PermissionLevel >= 10 {
+	if user.PermissionLevel >= 4 {
 		return ctx.Render("superadmin", fiber.Map{
-			"year": time.Now().Format("2006"),
-			"logo": logoURL,
+			"year":                  time.Now().Format("2006"),
+			"logo":                  logoURL,
+			"canAddSchool":          user.PermissionLevel >= 9,
+			"canAddDifferentSchool": user.PermissionLevel >= 3,
 		})
 	}
 
