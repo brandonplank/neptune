@@ -444,7 +444,7 @@ func Admin(ctx *fiber.Ctx) error {
 		"year":                  time.Now().Format("2006"),
 		"logo":                  "assets/img/viking_logo.png",
 		"canAddSchool":          user.PermissionLevel >= 9,
-		"canAddDifferentSchool": user.PermissionLevel >= 3,
+		"canAddDifferentSchool": user.PermissionLevel >= 5,
 	})
 }
 
