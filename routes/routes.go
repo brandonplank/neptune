@@ -473,8 +473,9 @@ func Home(ctx *fiber.Ctx) error {
 
 	if user.PermissionLevel > 1 {
 		return ctx.Render("admin", fiber.Map{
-			"year": time.Now().Format("2006"),
-			"logo": logoURL,
+			"year":             time.Now().Format("2006"),
+			"logo":             logoURL,
+			"hasAdminFeatures": true,
 		})
 	}
 
