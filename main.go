@@ -43,6 +43,7 @@ func setupRoutes(app *fiber.App) {
 	app.Static("/", "./public")
 
 	app.Get("/", routes.Home)
+	app.Get("/admin", routes.Admin)
 
 	// API
 

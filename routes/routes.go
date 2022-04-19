@@ -440,9 +440,11 @@ func Admin(ctx *fiber.Ctx) error {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, "you lack admin level 1 or above")
 	}
 
-	return ctx.Render("main", fiber.Map{
-		"year": time.Now().Format("2006"),
-		"logo": "assets/img/viking_logo.png",
+	return ctx.Render("superadmin", fiber.Map{
+		"year":                  time.Now().Format("2006"),
+		"logo":                  "assets/img/viking_logo.png",
+		"canAddSchool":          user.PermissionLevel >= 9,
+		"canAddDifferentSchool": user.PermissionLevel >= 3,
 	})
 }
 
@@ -466,12 +468,7 @@ func Home(ctx *fiber.Ctx) error {
 	}
 
 	if user.PermissionLevel >= 3 {
-		return ctx.Render("superadmin", fiber.Map{
-			"year":                  time.Now().Format("2006"),
-			"logo":                  logoURL,
-			"canAddSchool":          user.PermissionLevel >= 9,
-			"canAddDifferentSchool": user.PermissionLevel >= 3,
-		})
+		return Admin(ctx)
 	}
 
 	if user.PermissionLevel > 1 {
@@ -482,7 +479,8 @@ func Home(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Render("main", fiber.Map{
-		"year": time.Now().Format("2006"),
-		"logo": logoURL,
+		"year":             time.Now().Format("2006"),
+		"logo":             logoURL,
+		"hasAdminFeatures": user.PermissionLevel > 0,
 	})
 }
