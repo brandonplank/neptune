@@ -92,7 +92,7 @@ func AdminRegister(ctx *fiber.Ctx) error {
 	var payload RegisterPayload
 
 	if err := ctx.BodyParser(&payload); err != nil {
-		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, "must set proper data")
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
 	if len(payload.Name) < 1 || len(payload.Email) < 1 || len(payload.Password) < 1 {
