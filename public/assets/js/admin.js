@@ -118,7 +118,11 @@ function createUser() {
     var name = document.getElementById("addUser").elements["Name"].value;
     var password = document.getElementById("addUser").elements["Password"].value;
     var level = document.getElementById('addUser').elements['Level'].value;
-    var school = document.getElementById('addUser').elements['School'].value;
+    var school = ""
+    try {
+        school = document.getElementById('addUser').elements['School'].value;
+    } catch (error) {}
+    
     console.log(`Creating ${name}:${email} perm:${level} school:${school}`)
     $.ajax({
         type: "POST",
