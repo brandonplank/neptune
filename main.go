@@ -44,6 +44,7 @@ func setupRoutes(app *fiber.App) {
 
 	app.Get("/", routes.Home)
 	app.Get("/admin", routes.Admin)
+	app.Get("/passwordReset", routes.PasswordChangeSite)
 
 	// API
 
@@ -57,6 +58,7 @@ func setupRoutes(app *fiber.App) {
 	v1.Post("/id/:name", routes.Id)
 	v1.Post("/isOut/:name", routes.IsOut)
 	v1.Post("/addSchool", routes.AddSchool)
+	v1.Post("/changePassword", routes.PasswordChange)
 
 	v1.Get("/GetCSV", routes.GetCSV)
 	v1.Get("/GetAdminCSV", routes.GetAdminCSV)

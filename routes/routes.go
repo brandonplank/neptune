@@ -430,6 +430,42 @@ func AdminSearchStudent(ctx *fiber.Ctx) error {
 	return ctx.Send(content)
 }
 
+func PasswordChange(ctx *fiber.Ctx) error {
+	user, err := global.GetUserFromToken(ctx)
+	if err != nil {
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
+	}
+
+	type PasswordChnagePayload struct {
+		Password    string `json:"password"`
+		NewPassword string `json:"newPassword"`
+	}
+
+	var payload PasswordChnagePayload
+
+	if err := ctx.BodyParser(&payload); err != nil {
+		return err
+	}
+
+	if len(payload.Password) < 1 || len(payload.NewPassword) < 1 {
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, "must set proper data")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(payload.Password)); err != nil {
+		log.Println(err)
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, "Passwords do not match")
+	}
+
+	password, err := bcrypt.GenerateFromPassword([]byte(payload.NewPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
+	}
+
+	database.DB.Model(&user).Update("password", string(password))
+
+	return global.CraftReturnStatus(ctx, fiber.StatusOK, "changed password")
+}
+
 func Admin(ctx *fiber.Ctx) error {
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
@@ -445,6 +481,18 @@ func Admin(ctx *fiber.Ctx) error {
 		"logo":                  "assets/img/viking_logo.png",
 		"canAddSchool":          user.PermissionLevel >= 9,
 		"canAddDifferentSchool": user.PermissionLevel >= 5,
+	})
+}
+
+func PasswordChangeSite(ctx *fiber.Ctx) error {
+	_, err := global.GetUserFromToken(ctx)
+	if err != nil {
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
+	}
+
+	return ctx.Render("passwordreset", fiber.Map{
+		"year": time.Now().Format("2006"),
+		"logo": "assets/img/viking_logo.png",
 	})
 }
 
