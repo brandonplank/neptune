@@ -211,8 +211,8 @@ func AddSchool(ctx *fiber.Ctx) error {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
-	if user.PermissionLevel < 10 {
-		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, "You must have permission level 10 or higher")
+	if user.PermissionLevel < 9 {
+		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, "You must have permission level 9 or higher")
 	}
 
 	var data map[string]interface{}
@@ -461,7 +461,7 @@ func Home(ctx *fiber.Ctx) error {
 		return global.CraftReturnStatus(ctx, fiber.StatusUnauthorized, err.Error())
 	}
 
-	if user.PermissionLevel >= 4 {
+	if user.PermissionLevel >= 3 {
 		return ctx.Render("superadmin", fiber.Map{
 			"year":                  time.Now().Format("2006"),
 			"logo":                  logoURL,
