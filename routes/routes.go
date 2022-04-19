@@ -108,7 +108,11 @@ func AdminRegister(ctx *fiber.Ctx) error {
 			return global.CraftReturnStatus(ctx, fiber.StatusBadRequest, "Malformed UUID")
 		}
 	} else {
-		schoolID = guuid.Nil
+		if userSignedIn.PermissionLevel < 5 {
+			schoolID = userSignedIn.SchoolId
+		} else {
+			schoolID = guuid.Nil
+		}
 	}
 
 	// Check to make sure use cannot elevate another user higher than oneself
