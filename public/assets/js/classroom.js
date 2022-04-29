@@ -32,6 +32,7 @@ getTable()
 
 //Run at midnight
 runAtTime(getTable, 0, 0, 0)
+runAtTime(window.reload, 4, 0, 0)
 
 function sendTestContent(content) {
     $.ajax({
@@ -55,39 +56,6 @@ function cleanClass(name) {
         success: function (data) {
             console.log(data)
             getTable()
-        }
-    })
-}
-
-function addTeacher(name, email) {
-    console.log("Adding", name)
-    $.ajax({
-        type: "POST",
-        url: "/addTeacher",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data: JSON.stringify({
-            "name": name,
-            "email": email
-        }),
-        success: function (data) {
-        }
-    })
-}
-
-function removeTeacher(email) {
-    console.log("Removing", email)
-    $.ajax({
-        type: "POST",
-        url: "/removeTeacher",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data: JSON.stringify({
-            "email": email,
-        }),
-        success: function (data) {
         }
     })
 }
