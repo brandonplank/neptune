@@ -296,11 +296,11 @@ func Id(ctx *fiber.Ctx) error {
 	students := global.GetStudentsFromUserID(user.Id.String())
 
 	if global.IsStudentOut(studentName, students) {
-		log.Println(fmt.Sprintf("%s has retured to %s's classroom", studentName, user.Name))
+		log.Println(fmt.Sprintf("%s has retured to %s[%s]'s classroom", studentName, user.Name, user.Email))
 		var student models.Student
 		database.DB.Where("name = ?", studentName).Where("sign_in = ?", "Signed Out").First(&student).Update("sign_in", time.Now().Format("3:04 pm"))
 	} else {
-		log.Println(fmt.Sprintf("%s has left from %s's classroom", studentName, user.Name))
+		log.Println(fmt.Sprintf("%s has left from %s[%s]'s classroom", studentName, user.Name, user.Email))
 		student := models.Student{
 			Name:      studentName,
 			SignOut:   time.Now().Format("3:04 pm"),
