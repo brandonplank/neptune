@@ -6,6 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
+type User models.User
+
 var DB *gorm.DB
 
 func Connect() {
@@ -17,4 +19,23 @@ func Connect() {
 	connection.AutoMigrate(&models.School{})
 	connection.AutoMigrate(&models.User{})
 	connection.AutoMigrate(&models.Student{})
+}
+
+const (
+	Teacher = iota
+	TeacherWhoCanAddTeacher
+	SchoolAdmin
+	SchoolIT
+	DistrictAdmin
+	_
+	_
+	_
+	_
+	_
+	_
+	SuperAdmin
+)
+
+func (u *User) SetPermission(flag uint) {
+	DB.Model(&u).Update("permission_level", u.PermissionLevel|flag)
 }

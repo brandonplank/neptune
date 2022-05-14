@@ -1,7 +1,6 @@
 package models
 
 import (
-	"brandonplank.org/neptune/database"
 	guuid "github.com/google/uuid"
 	"gorm.io/gorm"
 	"time"
@@ -94,62 +93,4 @@ func (base *User) BeforeCreate(tx *gorm.DB) (err error) {
 	uuid := guuid.New()
 	base.Id = uuid
 	return
-}
-
-// User permission flags
-const (
-	CanAddTeacher = 1 << iota
-	CanRemoveTeacher
-	CanAddSchool
-	CanRemoveSchool
-	IsSchoolAdmin
-	IsSchoolIT
-	IsSuperAdmin
-)
-
-func (u *User) HasPermission(flag uint) bool {
-	return u.PermissionLevel&flag != 0
-}
-
-func (u *User) HasPermissions(flags ...uint) bool {
-	for _, flag := range flags {
-		if u.PermissionLevel&flag != 0 {
-			return false
-		}
-	}
-	return true
-}
-
-func (u *User) GetPermissions() []uint {
-	var ret []uint
-	for _, flag := range []uint{CanAddTeacher, CanRemoveTeacher, CanAddSchool, CanRemoveSchool, IsSchoolAdmin, IsSchoolIT, IsSuperAdmin} {
-		if u.HasPermission(flag) {
-			ret = append(ret, flag)
-		}
-	}
-	return ret
-}
-
-func (u *User) SetPermission(flag uint) {
-	database.DB.Model(&u).Update("permission_level", u.PermissionLevel|flag)
-}
-
-func (u *User) SetPermissions(flags ...uint) {
-	var combinedFlags uint
-	for _, flag := range flags {
-		combinedFlags |= flag
-	}
-	u.SetPermission(combinedFlags)
-}
-
-func (u *User) ClearPermission(flag uint) {
-	database.DB.Model(&u).Update("permission_level", u.PermissionLevel&^flag)
-}
-
-func (u *User) ClearPermissions(flags ...uint) {
-	var combinedFlags uint
-	for _, flag := range flags {
-		combinedFlags |= flag
-	}
-	u.ClearPermission(combinedFlags)
 }

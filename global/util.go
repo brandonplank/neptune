@@ -11,13 +11,14 @@ import (
 	"github.com/golang-jwt/jwt"
 	emailClient "github.com/jordan-wright/email"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/smtp"
 	"reflect"
 	"sort"
 )
 
-func GetUserFromToken(ctx *fiber.Ctx) (*models.User, error) {
+func GetUserFromToken(ctx *fiber.Ctx) (*database.User, error) {
 	cookie := ctx.Cookies("token")
 	if len(cookie) < 5 {
 		return nil, errors.New("please set jwt token")
@@ -31,7 +32,7 @@ func GetUserFromToken(ctx *fiber.Ctx) (*models.User, error) {
 	}
 
 	claims := token.Claims.(*jwt.StandardClaims)
-	var user models.User
+	var user database.User
 
 	database.DB.Where("id = ?", claims.Issuer).First(&user)
 	return &user, nil
@@ -93,14 +94,14 @@ func GetSchoolFromUser(id string) models.School {
 	return school
 }
 
-func GetNormalUsers() []models.User {
-	var users []models.User
+func GetNormalUsers() []database.User {
+	var users []database.User
 	database.DB.Where("permission_level < ?", 2).Find(&users)
 	return users
 }
 
-func GetAdmins() []models.User {
-	var admins []models.User
+func GetAdmins() []database.User {
+	var admins []database.User
 	database.DB.Where("permission_level > ? AND permission_level <= ?", 1, 5).Find(&admins)
 	return admins
 }
@@ -115,7 +116,7 @@ func DoesUserHaveStudents(id string) bool {
 
 func GetSchoolSignoutsFromSchoolID(id string) models.Students {
 	var students models.Students
-	var teachers []models.User
+	var teachers []database.User
 	database.DB.Where("school_id = ?", id).Find(&teachers)
 	for _, teacher := range teachers {
 		students = append(students, GetStudentsFromUserID(teacher.Id.String())...)
@@ -182,4 +183,15 @@ func EmailUsers() {
 			log.Println(err)
 		}
 	}
+}
+
+func GenerateJoinCode() string {
+	var letters = []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
+	s := make([]rune, 6)
+	for i := range s {
+		s[i] = letters[rand.Intn(len(letters))]
+	}
+	log.Println(string(s))
+	return string(s)
 }
