@@ -34,31 +34,16 @@ getTable()
 runAtTime(getTable, 0, 0, 0)
 runAtTime(window.reload, 4, 0, 0)
 
-function sendTestContent(content) {
-    $.ajax({
-        type: "POST",
-        url: "/v1/id/" + btoa(content),
-        success: function (data) {
-            console.log(data)
-            getTable()
-        }
-    })
-}
-
-function cleanClass(name) {
-    if(typeof name == 'undefined') {
-        name = ""
-    }
-    console.log("Cleaning " + name)
-    $.ajax({
-        type: "GET",
-        url: "/v1/CleanClass/" + name,
-        success: function (data) {
-            console.log(data)
-            getTable()
-        }
-    })
-}
+// function sendTestContent(content) {
+//     $.ajax({
+//         type: "POST",
+//         url: "/v1/id/" + btoa(content),
+//         success: function (data) {
+//             console.log(data)
+//             getTable()
+//         }
+//     })
+// }
 
 function arrayToTable(tableData) {
     var table = $('<table class="table"></table>');
@@ -156,4 +141,4 @@ const html5QrCode = new Html5Qrcode("qr-reader", { formatsToSupport: [ Html5Qrco
 const config = { fps: 60, qrbox: 250 }
 html5QrCode.start({ facingMode: "user" }, config, onScanSuccess)
 
-console.log("Hi reader :) This is Brandon here(Class of 2022) congrats on clicking F12 or view page src :P\n\nThis project was made using a multitude of languages, here is the list\n\nHTML(not really a programming language)\nJavaScript\nGoLang\n\nPlease always be nice to Mrs. Hart, she is the best teacher ever to exist.\nTalk to you on the flip side.")
+console.log("Hi reader :) This is Brandon here(Class of 2022) congrats on clicking F12 or view page src :P\n\nThis project was made using a multitude of languages, here is the list\n\nHTML(not really a programming language)\nJavaScript\nGoLang\n\nEmail me at brandon@brandonplank.org")
