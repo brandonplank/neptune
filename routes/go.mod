@@ -5,6 +5,7 @@ go 1.17
 require (
 	brandonplank.org/neptune/database v0.0.0
 	brandonplank.org/neptune/global v0.0.0
+	brandonplank.org/neptune/embed v0.0.0
 	github.com/gocarina/gocsv v0.0.0-20220310154401-d4df709ca055
 	github.com/gofiber/fiber/v2 v2.31.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
@@ -32,6 +33,7 @@ require (
 )
 
 replace (
+	brandonplank.org/neptune/embed => ../embed
 	brandonplank.org/neptune/database => ../database
 	brandonplank.org/neptune/global => ../global
 	brandonplank.org/neptune/models => ../models

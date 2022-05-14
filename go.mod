@@ -4,18 +4,22 @@ go 1.17
 
 require (
 	brandonplank.org/neptune/database v0.0.0
+	brandonplank.org/neptune/embed v0.0.0
 	brandonplank.org/neptune/global v0.0.0
 	brandonplank.org/neptune/routes v0.0.0
+	github.com/crypticplank/israilway v0.0.0-20220506200846-efecf6a999e2
 	github.com/getsentry/sentry-go v0.13.0
 	github.com/gofiber/fiber/v2 v2.32.0
 	github.com/gofiber/template v1.6.27
 	github.com/joho/godotenv v1.4.0
+	github.com/leaanthony/debme v1.2.1
 	github.com/mileusna/crontab v1.2.0
 )
 
 replace (
 	brandonplank.org/neptune/controllers => ./controllers
 	brandonplank.org/neptune/database => ./database
+	brandonplank.org/neptune/embed => ./embed
 	brandonplank.org/neptune/global => ./global
 	brandonplank.org/neptune/models => ./models
 	brandonplank.org/neptune/routes => ./routes

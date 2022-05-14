@@ -2,17 +2,22 @@ package main
 
 import (
 	"brandonplank.org/neptune/database"
+	neptuneembed "brandonplank.org/neptune/embed"
 	"brandonplank.org/neptune/global"
 	"brandonplank.org/neptune/routes"
 	"fmt"
+	. "github.com/crypticplank/israilway"
 	"github.com/getsentry/sentry-go"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/favicon"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/template/html"
 	"github.com/joho/godotenv"
 	"github.com/mileusna/crontab"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -32,6 +37,10 @@ func setupRoutes(app *fiber.App) {
 		cors.New(cors.Config{
 			AllowCredentials: true,
 		}),
+		favicon.New(favicon.Config{
+			FileSystem: http.FS(neptuneembed.Content),
+			File:       "public/favicon.ico",
+		}),
 		func(ctx *fiber.Ctx) error {
 			ctx.Append("Access-Control-Allow-Origin", "*")
 			ctx.Append("Developer", "Brandon Plank")
@@ -39,8 +48,11 @@ func setupRoutes(app *fiber.App) {
 			return ctx.Next()
 		},
 	)
-
-	app.Static("/", "./public")
+	app.Use("/assets", filesystem.New(filesystem.Config{
+		Root:       http.FS(neptuneembed.Content),
+		PathPrefix: "public/assets",
+		Browse:     false,
+	}))
 
 	app.Get("/", routes.Home)
 	app.Get("/admin", routes.Admin)
@@ -73,9 +85,15 @@ func setupRoutes(app *fiber.App) {
 }
 
 func init() {
-	if global.IsRailway() {
+	if IsRailway() {
 		log.Println("Running on railway")
 		global.Port = 443
+	} else {
+		log.Println("Reading from .env")
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
 	}
 }
 
@@ -88,19 +106,10 @@ func main() {
 	}
 	time.Local = loc
 
-	// Load .env if we are running local
-	if !global.IsRailway() {
-		err = godotenv.Load()
-		if err != nil {
-			log.Fatalln(err.Error())
-		}
-	}
-
 	global.EmailPassword, _ = os.LookupEnv("EMAIL_PASSWORD")
 	log.Println("Starting Neptune")
 
 	// Sentry
-
 	err = sentry.Init(sentry.ClientOptions{
 		Dsn:   "https://0b16d080fb454e9ca20243f008b061c1@o956450.ingest.sentry.io/6340501",
 		Debug: false,
@@ -117,16 +126,14 @@ func main() {
 	// MySQL
 	database.Connect()
 
-	// global.CleanStudents()
-
-	engine := html.New("./resources/views", ".html")
+	// Page rendering
+	engine := html.NewFileSystem(http.FS(neptuneembed.ViewContent), ".html")
 	router := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 		Views:                 engine,
 	})
 
 	// Cronjobs
-
 	ctab := crontab.New()
 
 	ctab.MustAddJob("5 15 * * 1-5", func() { // 03:05 PM every weekday

@@ -466,6 +466,8 @@ func PasswordChange(ctx *fiber.Ctx) error {
 	return global.CraftReturnStatus(ctx, fiber.StatusOK, "changed password")
 }
 
+// MARK: Webpages
+
 func Admin(ctx *fiber.Ctx) error {
 	user, err := global.GetUserFromToken(ctx)
 	if err != nil {
