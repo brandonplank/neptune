@@ -7,8 +7,9 @@ import (
 )
 
 type School struct {
-	Id   guuid.UUID `gorm:"primary_key" json:"id"`
-	Name string     `json:"name"`
+	Id         guuid.UUID `gorm:"primary_key" json:"id"`
+	Name       string     `json:"name"`
+	LicenseKey string     `gorm:"license_key" json:"-"`
 }
 
 func (base *School) BeforeCreate(tx *gorm.DB) (err error) {

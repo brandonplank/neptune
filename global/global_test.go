@@ -2,6 +2,10 @@ package global
 
 import "testing"
 
-func TestJoinCodeGeneration(t *testing.T) {
+func TestGenerateJoinCode(t *testing.T) {
 	t.Log(GenerateJoinCode())
+}
+
+func TestVerifyLicense(t *testing.T) {
+	t.Log(VerifyLicense("ELFLR-OOOO-EAORQ-NAMCM"))
 }

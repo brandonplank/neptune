@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/Cryptolens/cryptolens-golang/cryptolens"
 	csv "github.com/gocarina/gocsv"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
@@ -16,6 +17,7 @@ import (
 	"net/smtp"
 	"reflect"
 	"sort"
+	"time"
 )
 
 func GetUserFromToken(ctx *fiber.Ctx) (*database.User, error) {
@@ -190,8 +192,35 @@ func GenerateJoinCode() string {
 
 	s := make([]rune, 6)
 	for i := range s {
+		rand.NewSource(time.Now().Unix())
 		s[i] = letters[rand.Intn(len(letters))]
 	}
-	log.Println(string(s))
+	log.Printf("%s-%s", string(s)[:3], string(s)[3:])
 	return string(s)
+}
+
+func VerifyLicense(license string) bool {
+	// Feature 1 (F1) is unlimited time in our case
+	log.Printf("Verifying key: %s", license)
+
+	token := "WyIxODM1MzIzNSIsIkNrV0toSEkyTVc2N2VjWktrTFhSZ0ZsMHNnMUhydWRFbHlGQXV2bU4iXQ=="
+	publicKey := "<RSAKeyValue><Modulus>39PoIXYeHQijPn8v/4oMzJNQQyF8NdZyFDho7CZz0cczrGefc7/LB5/RSHA1akzwiG/xiNDE5XT+zaDr9qslkklKEWspYsC0oOAgvhBHKepYmOy5kf9JlIu8dTFAoJDGj4Mhb3hGV/DB8gvCbMnE+H7Q/jXPw289k0q9DXbqKicUot6EDkcB46PxMqMqFe0ykSzxc6vk0cyhbH+dX/ncL/eDkjwRQjPzl7SGkHK7pU+ndaDaRLmrb9BzcGLwepmQaQnJuJmnn0wSDRTAlJ3ynQOGiB5U+0B0zXpBz17qmcz6gVbY/soUMpO0OyDAynS98YU+spnshZRJG4yTlkg22Q==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
+
+	licenseKey, err := cryptolens.KeyActivate(token, cryptolens.KeyActivateArguments{
+		ProductId: 15153,
+		Key:       license,
+	})
+
+	if err != nil || !licenseKey.HasValidSignature(publicKey) {
+		log.Println("License key activation failed!")
+		return false
+	}
+
+	if time.Now().After(licenseKey.Expires) && licenseKey.F1 {
+		log.Println("Neptune license key has expired")
+		return false
+	}
+
+	log.Println("Neptune license verified")
+	return true
 }

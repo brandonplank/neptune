@@ -7,12 +7,12 @@ require (
 	brandonplank.org/neptune/embed v0.0.0
 	brandonplank.org/neptune/global v0.0.0
 	brandonplank.org/neptune/routes v0.0.0
+	github.com/Cryptolens/cryptolens-golang v0.0.0-20210826080145-eca9af9b3b22
 	github.com/crypticplank/israilway v0.0.0-20220506200846-efecf6a999e2
 	github.com/getsentry/sentry-go v0.13.0
 	github.com/gofiber/fiber/v2 v2.32.0
 	github.com/gofiber/template v1.6.27
 	github.com/joho/godotenv v1.4.0
-	github.com/leaanthony/debme v1.2.1
 	github.com/mileusna/crontab v1.2.0
 )
 
@@ -36,6 +36,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible // indirect
 	github.com/klauspost/compress v1.15.1 // indirect
+	github.com/leaanthony/debme v1.2.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.35.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
