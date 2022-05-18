@@ -34,16 +34,16 @@ getTable()
 runAtTime(getTable, 0, 0, 0)
 runAtTime(window.reload, 4, 0, 0)
 
-// function sendTestContent(content) {
-//     $.ajax({
-//         type: "POST",
-//         url: "/v1/id/" + btoa(content),
-//         success: function (data) {
-//             console.log(data)
-//             getTable()
-//         }
-//     })
-// }
+function sendTestContent(content) {
+    $.ajax({
+        type: "POST",
+        url: "/v1/id/" + btoa(content),
+        success: function (data) {
+            console.log(data)
+            getTable()
+        }
+    })
+}
 
 function arrayToTable(tableData) {
     var table = $('<table class="table"></table>');
