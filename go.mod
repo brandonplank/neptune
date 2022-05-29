@@ -7,7 +7,6 @@ require (
 	brandonplank.org/neptune/embed v0.0.0
 	brandonplank.org/neptune/global v0.0.0
 	brandonplank.org/neptune/routes v0.0.0
-	github.com/Cryptolens/cryptolens-golang v0.0.0-20210826080145-eca9af9b3b22
 	github.com/crypticplank/israilway v0.0.0-20220506200846-efecf6a999e2
 	github.com/getsentry/sentry-go v0.13.0
 	github.com/gofiber/fiber/v2 v2.32.0
@@ -27,6 +26,7 @@ replace (
 
 require (
 	brandonplank.org/neptune/models v0.0.0 // indirect
+	github.com/Cryptolens/cryptolens-golang v0.0.0-20210826080145-eca9af9b3b22 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gocarina/gocsv v0.0.0-20220310154401-d4df709ca055 // indirect
