@@ -11,7 +11,7 @@ type User models.User
 var DB *gorm.DB
 
 func Connect() {
-	connection, err := gorm.Open(mysql.Open("root:HsgGSFXLh0ppvLTJwser@tcp(containers-us-west-30.railway.app:5942)/railway?parseTime=true"), &gorm.Config{})
+	connection, err := gorm.Open(mysql.Open("root:OFxgwlZiALP5stswL8Yh@containers-us-west-30.railway.app:5942/railway?parseTime=true"), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
