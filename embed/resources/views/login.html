@@ -8,6 +8,21 @@
     <link rel="stylesheet" href="assets/css/notifications.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="assets/js/wasm_exec.js"></script>
+    <script>
+        const go = new Go();
+        console.log("Running wasm from JS")
+        // WebAssembly.instantiateStreaming(fetch("assets/wasm/asm.wasm"), go.importObject).then((result) => {
+        //     go.run(result.instance);
+        // });
+        fetch("assets/wasm/asm.wasm").then(result =>
+            result.arrayBuffer()
+        ).then(bytes =>
+            WebAssembly.instantiate(bytes, go.importObject)
+        ).then(result => {
+            go.run(result.instance)
+        });
+    </script>
     <meta name="theme-color" content="#7952b3">
     <style>
         .bd-placeholder-img {
@@ -27,6 +42,8 @@
     <link href="assets/css/signin.css" rel="stylesheet">
 </head>
 <body class="text-center">
+<input class="file" id="pdfs" name="uploadedpdfs[]" type='file' multiple/>
+<script src="assets/js/global.js"></script>
 <main class="form-signin">
     <form id="login">
         <img class="mb-4" src="{{.logo}}" alt="" width="72" height="88">

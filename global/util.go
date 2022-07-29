@@ -160,8 +160,8 @@ func EmailUsers() {
 	}
 
 	for _, user := range GetNormalUsers() {
+		// Skip teacher if they have no students.
 		if !DoesUserHaveStudents(user.Id.String()) {
-			log.Println(fmt.Sprintf("%s has no students, not sending email", user.Name))
 			continue
 		}
 		students := GetStudentsFromUserID(user.Id.String())
