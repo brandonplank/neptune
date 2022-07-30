@@ -29,13 +29,12 @@ require (
 	github.com/Cryptolens/cryptolens-golang v0.0.0-20220630131701-c1b99a2da081 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/gocarina/gocsv v0.0.0-20220727205534-7fbf8e1b37fb // indirect
+	github.com/gocarina/gocsv v0.0.0-20220729221910-a7386ae0b221 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible // indirect
-	github.com/jung-kurt/gofpdf v1.16.2 // indirect
 	github.com/klauspost/compress v1.15.9 // indirect
 	github.com/leaanthony/debme v1.2.1 // indirect
 	github.com/ledongthuc/pdf v0.0.0-20220302134840-0c2507a12d80 // indirect

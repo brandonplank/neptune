@@ -69,13 +69,18 @@ func ProcessFile(this js.Value, args []js.Value) interface{} {
 			_, err = createWriter.Write(qr)
 			if err != nil {
 				log.Println(err.Error())
+				continue
 			}
 		}
 	}
-	defer zipWriter.Close()
-	js.CopyBytesToJS(js.Global().Get("ReturnedBytes"), buf.Bytes())
-	log.Println(buf.Len())
-	return "success"
+	err = zipWriter.Close()
+	if err != nil {
+		log.Println(err.Error())
+		return js.Null()
+	}
+	ret := js.Global().Get("Uint8Array").New(buf.Len())
+	js.CopyBytesToJS(ret, buf.Bytes())
+	return ret
 }
 
 func main() {
