@@ -92,7 +92,7 @@ func init() {
 		log.Println("Reading from .env")
 		err := godotenv.Load()
 		if err != nil {
-			log.Fatalln(err.Error())
+			log.Println("Could not load .env, not going to send emails")
 		}
 	}
 }
@@ -148,6 +148,7 @@ func main() {
 	setupRoutes(router)
 	log.Println("Finished setting up routes")
 
+	log.Printf("Connect to Neptune using http://%s:%s", global.GetIPv4(), strconv.Itoa(global.Port))
 	log.Println("Started Neptune on port", strconv.Itoa(global.Port))
 	log.Fatalln(router.Listen(":" + strconv.Itoa(global.Port)))
 }
