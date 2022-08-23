@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neptune Login</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <script src="assets/js/notifications.js"></script>
+    <link rel="stylesheet" href="assets/css/notifications.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <meta name="theme-color" content="#7952b3">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <link href="assets/css/signin.css" rel="stylesheet">
+</head>
+<body class="text-center">
+<main class="form-signin">
+    <form id="login">
+        <img class="mb-4" src="{{.logo}}" alt="" width="72" height="88">
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+        <div class="form-floating">
+            <input type="email" class="form-control" id="Email" placeholder="name@example.com">
+            <label for="Email">Email address</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="Password" placeholder="Password">
+            <label for="Password">Password</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" onclick="login()">Sign in</button>
+    </form>
+</main>
+<script type="text/javascript" src="assets/js/login.js"></script>
+</body>
+</html>
